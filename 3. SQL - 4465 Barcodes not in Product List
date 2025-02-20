@@ -1,0 +1,24 @@
+SELECT
+    Fetch.PRODUCTS_TAKEHOME.BARCODE AS "Products Barcode",
+    Fetch.TRANSACTION_TAKEHOME.BARCODE AS "Transaction Barcode",(SUM(Fetch.TRANSACTION_TAKEHOME.FINAL_SALE)) AS "Final Sale"
+FROM
+    (
+        Fetch.TRANSACTION_TAKEHOME
+        LEFT OUTER JOIN Fetch.PRODUCTS_TAKEHOME ON (
+            Fetch.TRANSACTION_TAKEHOME.BARCODE = Fetch.PRODUCTS_TAKEHOME.BARCODE
+        )
+    )
+WHERE
+    (
+        (Fetch.PRODUCTS_TAKEHOME.BARCODE IS NULL)
+        AND CASE
+            WHEN (Fetch.TRANSACTION_TAKEHOME.BARCODE IS NULL) THEN FALSE
+            ELSE TRUE
+        END
+    )
+GROUP BY
+    1,
+    2
+ORDER BY
+    1 ASC,
+    2 ASC;
