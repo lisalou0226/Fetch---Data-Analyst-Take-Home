@@ -1,0 +1,23 @@
+SELECT
+    Fetch.PRODUCTS_TAKEHOME.BRAND AS "Brand",(COUNT(Fetch.TRANSACTION_TAKEHOME.FINAL_QUANTITY)) AS "Final Quantity",(SUM(Fetch.TRANSACTION_TAKEHOME.FINAL_SALE)) AS "Final Sale"
+FROM
+    (
+        Fetch.TRANSACTION_TAKEHOME
+        LEFT OUTER JOIN Fetch.PRODUCTS_TAKEHOME ON (
+            Fetch.TRANSACTION_TAKEHOME.BARCODE = Fetch.PRODUCTS_TAKEHOME.BARCODE
+        )
+    )
+WHERE
+    (
+        (
+            Fetch.PRODUCTS_TAKEHOME.CATEGORY_2 IN('Dips & Salsa')
+        )
+        AND CASE
+            WHEN (Fetch.PRODUCTS_TAKEHOME.BRAND IS NULL) THEN FALSE
+            ELSE TRUE
+        END
+    )
+GROUP BY
+    1
+ORDER BY
+    1 ASC;
