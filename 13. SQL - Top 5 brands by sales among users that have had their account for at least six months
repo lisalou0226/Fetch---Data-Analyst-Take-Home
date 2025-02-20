@@ -1,0 +1,39 @@
+SELECT
+    Fetch.PRODUCTS_TAKEHOME.BRAND AS "Brand",(SUM(Fetch.TRANSACTION_TAKEHOME.FINAL_SALE)) AS "Final Sale"
+FROM
+    (
+        (
+            Fetch.TRANSACTION_TAKEHOME
+            LEFT OUTER JOIN Fetch.USER_TAKEHOME ON (
+                Fetch.TRANSACTION_TAKEHOME.USER_ID = Fetch.USER_TAKEHOME.ID
+            )
+        )
+        LEFT OUTER JOIN Fetch.PRODUCTS_TAKEHOME ON (
+            Fetch.TRANSACTION_TAKEHOME.BARCODE = Fetch.PRODUCTS_TAKEHOME.BARCODE
+        )
+    )
+WHERE
+    (
+        CASE
+            WHEN (Fetch.PRODUCTS_TAKEHOME.BRAND IS NULL) THEN FALSE
+            ELSE TRUE
+        END
+        AND (
+            Fetch.USER_TAKEHOME.CREATED_DATE BETWEEN (
+                TO_TIMESTAMP(
+                    '1890-01-01 00:00:00.000',
+                    'yyyy-MM-dd HH:mm:ss.SSS'
+                )
+            )
+            AND (
+                TO_TIMESTAMP(
+                    '2024-08-19 23:59:59.000',
+                    'yyyy-MM-dd HH:mm:ss.SSS'
+                )
+            )
+        )
+    )
+GROUP BY
+    1
+ORDER BY
+    1 ASC;
