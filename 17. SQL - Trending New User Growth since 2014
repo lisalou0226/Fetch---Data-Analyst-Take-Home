@@ -1,0 +1,13 @@
+SELECT
+    CAST(
+        (
+            DATE_PART('year', "Fetch".USER_TAKEHOME.CREATED_DATE)
+        ) AS INTEGER
+    ) AS "Year_User_Created",
+    (DISTINCT(Fetch.USER_TAKEHOME.ID)) AS "Number_of_New_Users"
+FROM
+    "Fetch".USER_TAKEHOME
+GROUP BY
+    1
+ORDER BY
+    1 ASC;
