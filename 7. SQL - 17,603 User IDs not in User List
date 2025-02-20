@@ -1,0 +1,18 @@
+SELECT
+    Fetch.USER_TAKEHOME.ID AS "Id",
+    Fetch.TRANSACTION_TAKEHOME.USER_ID AS "Transaction User Id",(SUM(Fetch.TRANSACTION_TAKEHOME.FINAL_SALE)) AS "Final Sale"
+FROM
+    (
+        Fetch.TRANSACTION_TAKEHOME
+        LEFT OUTER JOIN Fetch.USER_TAKEHOME ON (
+            Fetch.TRANSACTION_TAKEHOME.USER_ID = Fetch.USER_TAKEHOME.ID
+        )
+    )
+WHERE
+    (Fetch.USER_TAKEHOME.ID IS NULL)
+GROUP BY
+    1,
+    2
+ORDER BY
+    1 ASC,
+    2 ASC;
